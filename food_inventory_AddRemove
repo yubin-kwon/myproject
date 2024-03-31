@@ -1,0 +1,32 @@
+inventory={}
+
+def add_ingredient(name, quantity):
+    if name in inventory:
+        inventory[name]+=quantity
+    else:
+        inventory[name]=quantity
+
+
+def remove_ingredient(name, quantity):
+    if name in inventory:
+        inventory[name]-=quantity
+        if inventory[name]<=0:
+            del inventory[name]
+    else:
+        print(f"{name}은 재고에 없습니다")
+
+
+#입력예시
+add_ingredient("밀가루",500)
+add_ingredient("시금치",200)
+add_ingredient("밀가루",300)
+
+print(inventory)
+
+remove_ingredient("밀가루",300)
+
+print(inventory)
+
+remove_ingredient("밀가루",500)
+
+print(inventory)
