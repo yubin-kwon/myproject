@@ -1,0 +1,11 @@
+def calculate_ROC(year):
+    ROC_year = year - 1911
+    return ROC_year
+
+def main():
+    year = int(input("서기 연도를 입력하세요: "))
+    ROC_year = calculate_ROC(year)
+    print(f"{year}년은 중화민국력: {ROC_year}년입니다.")
+
+if __name__ == "__main__":
+    main()
