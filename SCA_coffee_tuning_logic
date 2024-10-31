@@ -1,0 +1,158 @@
+def fine_tune_extraction_parameters(coffee_weight, extraction_time, extraction_volume):
+    target_coffee_weight = 16.0  # g
+    target_extraction_time = 25.0  # 초
+    target_extraction_volume = 30.0  # ml
+    
+    adjustments = {
+        "coffee_weight": None,
+        "extraction_time": None,
+        "grind_size": None,
+    }
+
+    # 원두 양 조정
+    if coffee_weight < target_coffee_weight:
+        adjustments["coffee_weight"] = "원두 양을 늘리세요."
+        coffee_weight += 1  # 예시로 1g 추가 (실제 조정량은 사용자가 결정)
+    elif coffee_weight > target_coffee_weight:
+        adjustments["coffee_weight"] = "원두 양을 줄이세요."
+        coffee_weight -= 1  # 예시로 1g 감소
+
+    # 추출 시간 조정
+    if extraction_time < target_extraction_time:
+        adjustments["extraction_time"] = "추출 시간을 늘리세요."
+        extraction_time += 1  # 예시로 1초 추가
+    elif extraction_time > target_extraction_time:
+        adjustments["extraction_time"] = "추출 시간을 줄이세요."
+        extraction_time -= 1  # 예시로 1초 감소
+
+    # 추출 양 조정
+    if extraction_volume < target_extraction_volume:
+        adjustments["coffee_weight"] = "원두 양을 늘리세요."  # 원두 양으로 대체
+        coffee_weight += 1  # 예시로 1g 추가
+    elif extraction_volume > target_extraction_volume:
+        adjustments["coffee_weight"] = "원두 양을 줄이세요."  # 원두 양으로 대체
+        coffee_weight -= 1  # 예시로 1g 감소
+
+    # 분쇄도 조정
+    if (coffee_weight != target_coffee_weight or 
+        extraction_volume < target_extraction_volume or 
+        extraction_volume > target_extraction_volume):
+        adjustments["grind_size"] = "분쇄도를 조절하세요."
+
+    return adjustments
+
+def evaluate_espresso_extraction(coffee_weight, extraction_time, extraction_volume):
+    # SCA 기준 정의
+    min_coffee_weight = 15  # g
+    max_coffee_weight = 17  # g
+    min_extraction_time = 20  # 초
+    max_extraction_time = 30  # 초
+    min_extraction_volume = 25  # ml
+    max_extraction_volume = 35  # ml
+
+    # 평가 결과 저장
+    result = {
+        "coffee_weight": min_coffee_weight <= coffee_weight <= max_coffee_weight,
+        "extraction_time": min_extraction_time <= extraction_time <= max_extraction_time,
+        "extraction_volume": min_extraction_volume <= extraction_volume <= max_extraction_volume,
+    }
+
+    # 평가 결과 출력
+    print("추출 평가 결과:")
+    print(f"원두 양: {'정상' if result['coffee_weight'] else '조정 필요'}")
+    print(f"추출 시간: {'정상' if result['extraction_time'] else '조정 필요'}")
+    print(f"추출 양: {'정상' if result['extraction_volume'] else '조정 필요'}")
+
+    # 기준에 벗어나는 경우 조정 방안 제시
+    if not all(result.values()):
+        print("\n조정 방안:")
+        if not result['coffee_weight']:
+            if coffee_weight < min_coffee_weight:
+                print("- 원두 양을 더 추가하세요.")
+            else:
+                print("- 원두 양을 줄이세요.")
+        
+        if not result['extraction_time']:
+            if extraction_time < min_extraction_time:
+                print("- 추출 시간을 늘리세요.")
+            else:
+                print("- 추출 시간을 줄이세요.")
+        
+        if not result['extraction_volume']:
+            if extraction_volume < min_extraction_volume:
+                print("- 원두 양을 더 추가하세요.")
+            else:
+                print("- 분쇄도를 더 굵게 조정하세요.")
+
+def adjust_extraction_parameters(coffee_weight, extraction_time, extraction_volume):
+    # SCA 기준 정의
+    min_coffee_weight = 15  # g
+    max_coffee_weight = 17  # g
+    min_extraction_time = 20  # 초
+    max_extraction_time = 30  # 초
+    min_extraction_volume = 25  # ml
+    max_extraction_volume = 35  # ml
+    
+    # 조정 기준
+    adjustment_parameters = {
+        "grind_size": None,
+        "coffee_weight": None,
+    }
+
+    # 원두 양 조정
+    if coffee_weight < min_coffee_weight or coffee_weight > max_coffee_weight:
+        if coffee_weight < min_coffee_weight:
+            adjustment_parameters["coffee_weight"] = "원두 양을 늘리세요."
+            coffee_weight += 1  # 예시로 1g 추가
+        elif coffee_weight > max_coffee_weight:
+            adjustment_parameters["coffee_weight"] = "원두 양을 줄이세요."
+            coffee_weight -= 1  # 예시로 1g 감소
+
+    # 추출 시간 조정
+    if extraction_time < min_extraction_time or extraction_time > max_extraction_time:
+        if extraction_time < min_extraction_time:
+            adjustment_parameters["extraction_time"] = "추출 시간을 늘리세요."
+            extraction_time += 1  # 예시로 1초 추가
+        elif extraction_time > max_extraction_time:
+            adjustment_parameters["extraction_time"] = "추출 시간을 줄이세요."
+            extraction_time -= 1  # 예시로 1초 감소
+
+    # 추출 양 평가
+    if extraction_volume < min_extraction_volume or extraction_volume > max_extraction_volume:
+        if extraction_volume < min_extraction_volume:
+            adjustment_parameters["grind_size"] = "더 고운 분쇄도로 변경"
+        elif extraction_volume > max_extraction_volume:
+            adjustment_parameters["grind_size"] = "더 굵은 분쇄도로 변경"
+
+    return adjustment_parameters
+
+# 사용자 입력 받기
+try:
+    coffee_weight = float(input("원두 양(g)을 입력하세요 (15g~17g): "))
+    extraction_time = float(input("추출 시간(초)을 입력하세요 (20초~30초): "))
+    extraction_volume = float(input("추출 양(ml)을 입력하세요 (25ml~35ml): "))
+
+    # 추출 평가
+    evaluate_espresso_extraction(coffee_weight, extraction_time, extraction_volume)
+
+    # 기준을 벗어났을 때만 조정
+    adjustments = adjust_extraction_parameters(coffee_weight, extraction_time, extraction_volume)
+    print("\n조정 사항:")
+    for parameter, action in adjustments.items():
+        if action:
+            print(f"{parameter}: {action}")
+
+    # 모든 조건이 부합할 때만 미세 조정
+    if all([
+        coffee_weight >= 15 and coffee_weight <= 17,
+        extraction_time >= 20 and extraction_time <= 30,
+        extraction_volume >= 25 and extraction_volume <= 35,
+    ]):
+        adjustments = fine_tune_extraction_parameters(coffee_weight, extraction_time, extraction_volume)
+        print("\n미세 조정 사항:")
+        for parameter, action in adjustments.items():
+            if action:
+                print(f"{parameter}: {action}")
+
+except ValueError:
+    print("잘못된 입력입니다. 숫자를 입력해 주세요.")
