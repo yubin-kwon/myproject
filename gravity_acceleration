@@ -1,0 +1,26 @@
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib import rc
+from IPython.display import HTML
+import numpy as np
+
+# 초기 설정
+fig, ax = plt.subplots()
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 10)
+
+ball, = ax.plot([], [], 'bo', markersize=10)
+
+# 공의 수직 운동 업데이트 함수
+def update(frame):
+    y = 10 - 0.5 * 9.8 * (frame / 10)**2  # 중력 가속도 반영
+    if y < 0:  # 공이 바닥에 닿으면 멈춤
+        y = 0
+    ball.set_data([5], [y])  # 공 위치 업데이트
+    return ball,
+
+# 애니메이션 생성
+ani = animation.FuncAnimation(fig, update, frames=np.arange(0, 50), blit=True)
+
+# 주피터 환경에서 HTML로 표시
+HTML(ani.to_jshtml())
